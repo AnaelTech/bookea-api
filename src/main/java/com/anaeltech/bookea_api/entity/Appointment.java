@@ -76,6 +76,15 @@ public class Appointment {
     this.endAt = endAt;
   }
 
+  public Appointment(User user, Client client, @NotNull LocalDateTime startAt, @NotNull LocalDateTime endAt,
+      AppointmentStatus status) {
+    this.user = user;
+    this.client = client;
+    this.startAt = startAt;
+    this.endAt = endAt;
+    this.status = status;
+  }
+
   public Long getId() {
     return id;
   }
