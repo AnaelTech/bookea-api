@@ -1,6 +1,6 @@
 package com.anaeltech.bookea_api.dto;
 
-public record UserUpdateDto {
+public class UserUpdateDto {
   private String firstname;
   private String lastname;
   private String phone;
