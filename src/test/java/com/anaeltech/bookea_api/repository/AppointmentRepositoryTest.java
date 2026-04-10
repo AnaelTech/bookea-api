@@ -14,7 +14,7 @@ import com.anaeltech.bookea_api.entity.AppointmentStatus;
 import com.anaeltech.bookea_api.entity.Client;
 import com.anaeltech.bookea_api.entity.User;
 
-@DataJpaTest
+@DataJpaTest(showSql = true)
 class AppointmentRepositoryTest {
 
   @Autowired

@@ -10,6 +10,7 @@ import com.anaeltech.bookea_api.dto.UserResponseDto;
 import com.anaeltech.bookea_api.dto.UserUpdateDto;
 import com.anaeltech.bookea_api.entity.User;
 import com.anaeltech.bookea_api.exceptions.EmailAlreadyExistException;
+import com.anaeltech.bookea_api.exceptions.UserNotFoundException;
 import com.anaeltech.bookea_api.mapper.UserMapper;
 import com.anaeltech.bookea_api.repository.UserRepository;
 import com.anaeltech.bookea_api.service.UserService;
@@ -34,12 +35,13 @@ public class UserServiceImplement implements UserService {
 
   @Override
   public UserResponseDto findById(Long id) {
-    return userRepository.findById(id).map(userMapper::toDto).orElse(null);
+    return userRepository.findById(id).map(userMapper::toDto)
+        .orElseThrow(() -> new UserNotFoundException("User not found with id" + id));
   }
 
   @Override
   public UserResponseDto createUser(UserCreateDto userCreateDto) {
-    if (userRepository.emailAlreadyExist(userCreateDto.getEmail())) {
+    if (userRepository.existsByEmail(userCreateDto.getEmail())) {
       throw new EmailAlreadyExistException(userCreateDto.getEmail());
     }
     String encodedPassword = passwordEncoder.encode(userCreateDto.getPassword());
@@ -50,19 +52,24 @@ public class UserServiceImplement implements UserService {
 
   @Override
   public UserResponseDto findByEmail(String email) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
+    return userRepository.findByEmail(email).map(userMapper::toDto)
+        .orElseThrow(() -> new UserNotFoundException("User not found with email" + email));
   }
 
   @Override
   public void deleteUser(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+    if (!userRepository.existsById(id)) {
+      throw new UserNotFoundException("User not found with id" + id);
+    }
+    userRepository.deleteById(id);
   }
 
   @Override
-  public UserResponseDto updateUser(UserUpdateDto user) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+  public UserResponseDto updateUser(Long id, UserUpdateDto userUpdateDto) {
+    User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id" + id));
+
+    userMapper.updateEntity(userUpdateDto, user);
+    User updatedUser = userRepository.save(user);
+    return userMapper.toDto(updatedUser);
   }
 }
