@@ -3,20 +3,22 @@ package com.anaeltech.bookea_api.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.anaeltech.bookea_api.entity.User;
+import com.anaeltech.bookea_api.dto.UserCreateDto;
+import com.anaeltech.bookea_api.dto.UserResponseDto;
+import com.anaeltech.bookea_api.dto.UserUpdateDto;
 
 public interface UserService {
 
-  Page<User> findAll(Pageable pageable);
+  Page<UserResponseDto> findAll(Pageable pageable);
 
-  User findById(Long id);
+  UserResponseDto findById(Long id);
 
-  User createUser(User user);
+  UserResponseDto createUser(UserCreateDto userCreateDto);
 
-  User findByEmail(String email);
+  UserResponseDto findByEmail(String email);
 
   void deleteUser(Long id);
 
-  User updateUser(User user);
+  UserResponseDto updateUser(UserUpdateDto userUpdateDto);
 
 }
