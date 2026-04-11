@@ -3,25 +3,28 @@ package com.anaeltech.bookea_api.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.anaeltech.bookea_api.dto.ClientCreateDto;
+import com.anaeltech.bookea_api.dto.ClientResponseDto;
+import com.anaeltech.bookea_api.dto.ClientUpdateDto;
 import com.anaeltech.bookea_api.entity.Client;
 import com.anaeltech.bookea_api.service.ClientService;
 
 public class ClientServiceImplement implements ClientService {
 
   @Override
-  public Page<Client> findAll(Pageable pageable) {
+  public Page<ClientResponseDto> findAll(Pageable pageable) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'findAll'");
   }
 
   @Override
-  public Client findById(Long id) {
+  public ClientResponseDto findById(Long id) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'findById'");
   }
 
   @Override
-  public Client createClient(Client client) {
+  public ClientResponseDto createClient(ClientCreateDto clientCreateDto) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'createClient'");
   }
@@ -33,7 +36,7 @@ public class ClientServiceImplement implements ClientService {
   }
 
   @Override
-  public Client updateClient(Client client) {
+  public ClientResponseDto updateClient(Long id, ClientUpdateDto clientUpdateDto) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'updateClient'");
   }

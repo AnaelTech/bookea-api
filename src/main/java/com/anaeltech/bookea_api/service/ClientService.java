@@ -3,18 +3,20 @@ package com.anaeltech.bookea_api.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.anaeltech.bookea_api.entity.Client;
+import com.anaeltech.bookea_api.dto.ClientCreateDto;
+import com.anaeltech.bookea_api.dto.ClientResponseDto;
+import com.anaeltech.bookea_api.dto.ClientUpdateDto;
 
 public interface ClientService {
 
-  Page<Client> findAll(Pageable pageable);
+  Page<ClientResponseDto> findAll(Pageable pageable);
 
-  Client findById(Long id);
+  ClientResponseDto findById(Long id);
 
-  Client createClient(Client client);
+  ClientResponseDto createClient(ClientCreateDto client);
 
   void deleteClient(Long id);
 
-  Client updateClient(Client client);
+  ClientResponseDto updateClient(Long id, ClientUpdateDto client);
 
 }
