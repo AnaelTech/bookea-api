@@ -14,18 +14,19 @@ public class UserMapper {
     return new UserResponseDto(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPhone());
   }
 
-  public User toEntity(UserCreateDto userCreateDto) {
+  public User toEntity(UserCreateDto userCreateDto, String encodedPassword) {
     User user = new User();
-    user.setFirstname(userCreateDto.getFirstname());
-    user.setLastname(userCreateDto.getLastname());
-    user.setEmail(userCreateDto.getEmail());
-    user.setPhone(userCreateDto.getPhone());
+    user.setFirstname(userCreateDto.firstname());
+    user.setLastname(userCreateDto.lastname());
+    user.setEmail(userCreateDto.email());
+    user.setPhone(userCreateDto.phone());
+    user.setPassword(encodedPassword);
     return user;
   }
 
   public void updateEntity(UserUpdateDto userUpdateDto, User user) {
-    user.setFirstname(userUpdateDto.getFirstname());
-    user.setLastname(userUpdateDto.getLastname());
-    user.setPhone(userUpdateDto.getPhone());
+    user.setFirstname(userUpdateDto.firstname());
+    user.setLastname(userUpdateDto.lastname());
+    user.setPhone(userUpdateDto.phone());
   }
 }

@@ -41,12 +41,11 @@ public class UserServiceImplement implements UserService {
 
   @Override
   public UserResponseDto createUser(UserCreateDto userCreateDto) {
-    if (userRepository.existsByEmail(userCreateDto.getEmail())) {
-      throw new EmailAlreadyExistException(userCreateDto.getEmail());
+    if (userRepository.existsByEmail(userCreateDto.email())) {
+      throw new EmailAlreadyExistException(userCreateDto.email());
     }
-    String encodedPassword = passwordEncoder.encode(userCreateDto.getPassword());
-    userCreateDto.setPassword(encodedPassword);
-    User savedUser = userRepository.save(userMapper.toEntity(userCreateDto));
+    String encodedPassword = passwordEncoder.encode(userCreateDto.password());
+    User savedUser = userRepository.save(userMapper.toEntity(userCreateDto, encodedPassword));
     return userMapper.toDto(savedUser);
   }
 
