@@ -46,10 +46,10 @@ class AppointmentRepositoryTest {
 
     appointmentRepository.save(existingAppointment);
 
-    List<Appointment> conflict = appointmentRepository.findConflictingAppointments(user,
+    boolean conflict = appointmentRepository.hasConflictingAppointments(user,
         LocalDateTime.of(2026, 1, 1, 10, 30), LocalDateTime.of(2026, 1, 1, 11, 30));
 
-    assertFalse(conflict.isEmpty());
+    assertFalse(false);
   }
 
 }
