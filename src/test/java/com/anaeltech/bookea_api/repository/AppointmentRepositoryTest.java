@@ -3,7 +3,6 @@ package com.anaeltech.bookea_api.repository;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ class AppointmentRepositoryTest {
     boolean conflict = appointmentRepository.hasConflictingAppointments(user,
         LocalDateTime.of(2026, 1, 1, 10, 30), LocalDateTime.of(2026, 1, 1, 11, 30));
 
-    assertFalse(false);
+    assertFalse(conflict);
   }
 
 }
