@@ -26,7 +26,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
       AND a.startAt < :endAt
       AND a.endAt > :startAt
       """)
-  List<Appointment> findConflictingAppointments(
+  boolean hasConflictingAppointments(
       User user,
       LocalDateTime startAt,
       LocalDateTime endAt);
