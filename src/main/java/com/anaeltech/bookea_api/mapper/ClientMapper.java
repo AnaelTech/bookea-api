@@ -17,16 +17,16 @@ public class ClientMapper {
 
   public Client toEntity(ClientCreateDto clientCreateDto) {
     Client client = new Client();
-    client.setFirstname(clientCreateDto.getFirstname());
-    client.setLastname(clientCreateDto.getLastname());
-    client.setEmail(clientCreateDto.getEmail());
-    client.setPhone(clientCreateDto.getPhone());
+    client.setFirstname(clientCreateDto.firstname());
+    client.setLastname(clientCreateDto.lastname());
+    client.setEmail(clientCreateDto.email());
+    client.setPhone(clientCreateDto.phone());
     return client;
   }
 
   public void updateEntity(ClientUpdateDto clientUpdateDto, Client client) {
-    client.setFirstname(clientUpdateDto.getFirstname());
-    client.setLastname(clientUpdateDto.getLastname());
-    client.setPhone(clientUpdateDto.getPhone());
+    client.setFirstname(clientUpdateDto.firstname());
+    client.setLastname(clientUpdateDto.lastname());
+    client.setPhone(clientUpdateDto.phone());
   }
 }

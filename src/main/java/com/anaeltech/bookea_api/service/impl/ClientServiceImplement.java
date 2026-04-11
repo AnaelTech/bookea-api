@@ -36,8 +36,8 @@ public class ClientServiceImplement implements ClientService {
 
   @Override
   public ClientResponseDto createClient(ClientCreateDto clientCreateDto) {
-    if (clientRepository.existsByEmail(clientCreateDto.getEmail())) {
-      throw new EmailAlreadyExistException(clientCreateDto.getEmail());
+    if (clientRepository.existsByEmail(clientCreateDto.email())) {
+      throw new EmailAlreadyExistException(clientCreateDto.email());
     }
     Client savedClient = clientRepository.save(clientMapper.toEntity(clientCreateDto));
     return clientMapper.toDto(savedClient);
