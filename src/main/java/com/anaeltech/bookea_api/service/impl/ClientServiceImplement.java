@@ -7,38 +7,64 @@ import com.anaeltech.bookea_api.dto.ClientCreateDto;
 import com.anaeltech.bookea_api.dto.ClientResponseDto;
 import com.anaeltech.bookea_api.dto.ClientUpdateDto;
 import com.anaeltech.bookea_api.entity.Client;
+import com.anaeltech.bookea_api.exceptions.EmailAlreadyExistException;
+import com.anaeltech.bookea_api.exceptions.UserNotFoundException;
+import com.anaeltech.bookea_api.mapper.ClientMapper;
+import com.anaeltech.bookea_api.repository.ClientRepository;
 import com.anaeltech.bookea_api.service.ClientService;
 
 public class ClientServiceImplement implements ClientService {
 
+  private ClientRepository clientRepository;
+  private ClientMapper clientMapper;
+
+  public ClientServiceImplement(ClientRepository clientRepository, ClientMapper clientMapper) {
+    this.clientRepository = clientRepository;
+    this.clientMapper = clientMapper;
+  }
+
   @Override
   public Page<ClientResponseDto> findAll(Pageable pageable) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    return clientRepository.findAll(pageable).map(clientMapper::toDto);
   }
 
   @Override
   public ClientResponseDto findById(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    return clientRepository.findById(id).map(clientMapper::toDto)
+        .orElseThrow(() -> new UserNotFoundException("Client not found with id" + id));
   }
 
   @Override
   public ClientResponseDto createClient(ClientCreateDto clientCreateDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'createClient'");
+    if (clientRepository.existsByEmail(clientCreateDto.getEmail())) {
+      throw new EmailAlreadyExistException(clientCreateDto.getEmail());
+    }
+    Client savedClient = clientRepository.save(clientMapper.toEntity(clientCreateDto));
+    return clientMapper.toDto(savedClient);
   }
 
   @Override
   public void deleteClient(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
+    if (!clientRepository.existsById(id)) {
+      throw new UserNotFoundException("Client not found with id" + id);
+    }
+    clientRepository.deleteById(id);
   }
 
   @Override
   public ClientResponseDto updateClient(Long id, ClientUpdateDto clientUpdateDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateClient'");
+    Client client = clientRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException("Client not found with id" + id));
+
+    clientMapper.updateEntity(clientUpdateDto, client);
+    Client updatedClient = clientRepository.save(client);
+    return clientMapper.toDto(updatedClient);
+  }
+
+  @Override
+  public ClientResponseDto findByEmail(String email) {
+    return clientRepository.findByEmail(email).map(clientMapper::toDto)
+        .orElseThrow(() -> new UserNotFoundException("Client not found with email" + email));
   }
 
 }

@@ -19,4 +19,5 @@ public interface ClientService {
 
   ClientResponseDto updateClient(Long id, ClientUpdateDto client);
 
+  ClientResponseDto findByEmail(String email);
 }
