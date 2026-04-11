@@ -1,6 +1,7 @@
 package com.anaeltech.bookea_api.repository;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 
@@ -48,7 +49,7 @@ class AppointmentRepositoryTest {
     boolean conflict = appointmentRepository.hasConflictingAppointments(user,
         LocalDateTime.of(2026, 1, 1, 10, 30), LocalDateTime.of(2026, 1, 1, 11, 30));
 
-    assertFalse(conflict);
+    assertTrue(conflict);
   }
 
 }
