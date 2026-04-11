@@ -3,17 +3,19 @@ package com.anaeltech.bookea_api.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.anaeltech.bookea_api.entity.Appointment;
+import com.anaeltech.bookea_api.dto.AppointmentCreateDto;
+import com.anaeltech.bookea_api.dto.AppointmentResponseDto;
+import com.anaeltech.bookea_api.dto.AppointmentUpdateDto;
 
 public interface AppointmentService {
 
-  Page<Appointment> findAll(Pageable pageable);
+  Page<AppointmentResponseDto> findAll(Pageable pageable);
 
-  Appointment findById(Long id);
+  AppointmentResponseDto findById(Long id);
 
-  Appointment createAppointment(Appointment appointment);
+  AppointmentResponseDto createAppointment(AppointmentCreateDto appointmentCreateDto);
 
   void deleteAppointment(Long id);
 
-  Appointment updateAppointment(Appointment appointment);
+  AppointmentResponseDto updateAppointment(Long id, AppointmentUpdateDto appointmentUpdateDto);
 }
