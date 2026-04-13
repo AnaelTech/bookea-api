@@ -12,7 +12,6 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -24,29 +23,21 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank
-  @Size(max = 100)
   @Column(name = "firstname", length = 100, nullable = false)
   private String firstname;
 
-  @NotBlank
-  @Size(max = 100)
   @Column(name = "lastname", length = 100, nullable = false)
   private String lastname;
 
-  @NotBlank
   @Email
-  @Size(max = 150)
   @Column(name = "email", length = 100, nullable = false, unique = true)
   private String email;
 
-  @NotBlank
   @Size(min = 8, max = 255)
   @Column(name = "password", nullable = false)
   private String password;
 
   @Pattern(regexp = "^[0-9+\\-\\s]*$")
-  @Size(max = 20)
   @Column(name = "phone", length = 20)
   private String phone;
 

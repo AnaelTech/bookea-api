@@ -51,6 +51,7 @@ public class UserServiceImplement implements UserService {
 
   @Override
   public UserResponseDto findByEmail(String email) {
+    // TODO:Create function verification email is an email
     return userRepository.findByEmail(email).map(userMapper::toDto)
         .orElseThrow(() -> new UserNotFoundException("User not found with email" + email));
   }
