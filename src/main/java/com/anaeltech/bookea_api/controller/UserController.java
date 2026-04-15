@@ -18,6 +18,7 @@ import com.anaeltech.bookea_api.dto.UserCreateDto;
 import com.anaeltech.bookea_api.dto.UserResponseDto;
 import com.anaeltech.bookea_api.dto.UserUpdateDto;
 import com.anaeltech.bookea_api.entity.User;
+import com.anaeltech.bookea_api.exceptions.UserNotFoundException;
 import com.anaeltech.bookea_api.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,11 +85,12 @@ public class UserController {
   @Operation(summary = "Get user by email", responses = {
       @ApiResponse(responseCode = "200", description = "Successfully retrieved user", content = @Content(schema = @Schema(implementation = User.class))),
       @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class))),
+      @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
   })
-  @GetMapping("/email/{email}")
+  @GetMapping("/by-email")
   public ResponseEntity<UserResponseDto> getUserByEmail(
-      @Parameter(description = "User email", example = "user@example.com") @PathVariable("email") String email) {
+      @Parameter(description = "User email", example = "user@example.com") @RequestParam("email") String email) {
     return ResponseEntity.ok(userService.findByEmail(email));
   }
 
@@ -100,7 +102,6 @@ public class UserController {
   @PostMapping
   public ResponseEntity<UserResponseDto> createUser(
       @Parameter(description = "User to create") @Valid @RequestBody UserCreateDto user) {
-    System.out.println(">>> DTO reçu : " + user);
     UserResponseDto userResponseDto = userService.createUser(user);
     return ResponseEntity.status(201).body(userResponseDto);
   }
@@ -111,14 +112,15 @@ public class UserController {
       @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
   })
   @PutMapping("/{id}")
-  public ResponseEntity<UserResponseDto> updateUser(@Parameter(description = "User to update") @PathVariable Long id,
-      @RequestBody UserUpdateDto user) {
+  public ResponseEntity<UserResponseDto> updateUser(
+      @Parameter(description = "User to update") @PathVariable Long id,
+      @Valid @RequestBody UserUpdateDto user) {
     UserResponseDto userResponseDto = userService.updateUser(id, user);
     return ResponseEntity.ok(userResponseDto);
   }
 
   @Operation(summary = "Delete user", responses = {
-      @ApiResponse(responseCode = "200", description = "Successfully deleted user", content = @Content(schema = @Schema(implementation = User.class))),
+      @ApiResponse(responseCode = "204", description = "Successfully deleted user", content = @Content(schema = @Schema(implementation = User.class))),
       @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
       @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
   })
