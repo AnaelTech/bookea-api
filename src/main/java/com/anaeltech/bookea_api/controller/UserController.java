@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -73,7 +74,7 @@ public class UserController {
   @Operation(summary = "Get user by id", responses = {
       @ApiResponse(responseCode = "200", description = "Successfully retrieved user", content = @Content(schema = @Schema(implementation = User.class))),
       @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class))),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
   })
   @GetMapping("/{id}")
@@ -90,7 +91,7 @@ public class UserController {
   })
   @GetMapping("/by-email")
   public ResponseEntity<UserResponseDto> getUserByEmail(
-      @Parameter(description = "User email", example = "user@example.com") @RequestParam("email") String email) {
+      @Parameter(description = "User email", example = "user@example.com") @RequestParam("email") @Email(message = "Email is not valid") String email) {
     return ResponseEntity.ok(userService.findByEmail(email));
   }
 
@@ -109,7 +110,7 @@ public class UserController {
   @Operation(summary = "Update user", responses = {
       @ApiResponse(responseCode = "200", description = "Successfully updated user", content = @Content(schema = @Schema(implementation = User.class))),
       @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class))),
   })
   @PutMapping("/{id}")
   public ResponseEntity<UserResponseDto> updateUser(
@@ -122,7 +123,7 @@ public class UserController {
   @Operation(summary = "Delete user", responses = {
       @ApiResponse(responseCode = "204", description = "Successfully deleted user", content = @Content(schema = @Schema(implementation = User.class))),
       @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+      @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class))),
   })
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteUser(@Parameter(description = "User to delete") @PathVariable Long id) {
