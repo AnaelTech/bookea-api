@@ -2,6 +2,7 @@ package com.anaeltech.bookea_api.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.anaeltech.bookea_api.dto.AppointmentCreateDto;
 import com.anaeltech.bookea_api.dto.AppointmentResponseDto;
@@ -34,17 +35,20 @@ public class AppointmentServiceImplement implements AppointmentService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<AppointmentResponseDto> findAll(Pageable pageable) {
     return appointmentRepository.findAll(pageable).map(appointmentMapper::toDto);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public AppointmentResponseDto findById(Long id) {
     return appointmentRepository.findById(id).map(appointmentMapper::toDto)
         .orElseThrow(() -> new AppointmentNotFoundException(id));
   }
 
   @Override
+  @Transactional
   public AppointmentResponseDto createAppointment(AppointmentCreateDto appointmentCreateDto) {
     User user = userRepository.findById(appointmentCreateDto.userId())
         .orElseThrow(() -> new UserNotFoundException("User not found with id" + appointmentCreateDto.userId()));
@@ -62,6 +66,7 @@ public class AppointmentServiceImplement implements AppointmentService {
   }
 
   @Override
+  @Transactional
   public void deleteAppointment(Long id) {
     if (!appointmentRepository.existsById(id)) {
       throw new AppointmentNotFoundException(id);
@@ -70,6 +75,7 @@ public class AppointmentServiceImplement implements AppointmentService {
   }
 
   @Override
+  @Transactional
   public AppointmentResponseDto updateAppointment(Long id, AppointmentUpdateDto appointmentUpdateDto) {
     Appointment appointment = appointmentRepository.findById(id)
         .orElseThrow(() -> new AppointmentNotFoundException(id));

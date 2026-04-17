@@ -2,6 +2,7 @@ package com.anaeltech.bookea_api.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.anaeltech.bookea_api.dto.ClientCreateDto;
 import com.anaeltech.bookea_api.dto.ClientResponseDto;
@@ -24,17 +25,20 @@ public class ClientServiceImplement implements ClientService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<ClientResponseDto> findAll(Pageable pageable) {
     return clientRepository.findAll(pageable).map(clientMapper::toDto);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ClientResponseDto findById(Long id) {
     return clientRepository.findById(id).map(clientMapper::toDto)
-        .orElseThrow(() -> new UserNotFoundException("Client not found with id" + id));
+        .orElseThrow(() -> new UserNotFoundException("Client not found with id " + id));
   }
 
   @Override
+  @Transactional
   public ClientResponseDto createClient(ClientCreateDto clientCreateDto) {
     if (clientRepository.existsByEmail(clientCreateDto.email())) {
       throw new EmailAlreadyExistException(clientCreateDto.email());
@@ -44,17 +48,19 @@ public class ClientServiceImplement implements ClientService {
   }
 
   @Override
+  @Transactional
   public void deleteClient(Long id) {
     if (!clientRepository.existsById(id)) {
-      throw new UserNotFoundException("Client not found with id" + id);
+      throw new UserNotFoundException("Client not found with id " + id);
     }
     clientRepository.deleteById(id);
   }
 
   @Override
+  @Transactional
   public ClientResponseDto updateClient(Long id, ClientUpdateDto clientUpdateDto) {
     Client client = clientRepository.findById(id)
-        .orElseThrow(() -> new UserNotFoundException("Client not found with id" + id));
+        .orElseThrow(() -> new UserNotFoundException("Client not found with id " + id));
 
     clientMapper.updateEntity(clientUpdateDto, client);
     Client updatedClient = clientRepository.save(client);
@@ -62,9 +68,10 @@ public class ClientServiceImplement implements ClientService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ClientResponseDto findByEmail(String email) {
     return clientRepository.findByEmail(email).map(clientMapper::toDto)
-        .orElseThrow(() -> new UserNotFoundException("Client not found with email" + email));
+        .orElseThrow(() -> new UserNotFoundException("Client not found with email " + email));
   }
 
 }
