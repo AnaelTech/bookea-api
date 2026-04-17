@@ -2,6 +2,7 @@ package com.anaeltech.bookea_api.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anaeltech.bookea_api.dto.AppointmentCreateDto;
@@ -19,6 +20,7 @@ import com.anaeltech.bookea_api.repository.ClientRepository;
 import com.anaeltech.bookea_api.repository.UserRepository;
 import com.anaeltech.bookea_api.service.AppointmentService;
 
+@Service
 public class AppointmentServiceImplement implements AppointmentService {
 
   private final AppointmentRepository appointmentRepository;
@@ -81,7 +83,6 @@ public class AppointmentServiceImplement implements AppointmentService {
         .orElseThrow(() -> new AppointmentNotFoundException(id));
 
     appointmentMapper.updateEntity(appointmentUpdateDto, appointment);
-    Appointment updatedAppointment = appointmentRepository.save(appointment);
-    return appointmentMapper.toDto(updatedAppointment);
+    return appointmentMapper.toDto(appointment);
   }
 }

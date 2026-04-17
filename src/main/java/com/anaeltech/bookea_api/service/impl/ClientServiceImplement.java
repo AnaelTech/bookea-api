@@ -2,6 +2,7 @@ package com.anaeltech.bookea_api.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anaeltech.bookea_api.dto.ClientCreateDto;
@@ -14,6 +15,7 @@ import com.anaeltech.bookea_api.mapper.ClientMapper;
 import com.anaeltech.bookea_api.repository.ClientRepository;
 import com.anaeltech.bookea_api.service.ClientService;
 
+@Service
 public class ClientServiceImplement implements ClientService {
 
   private ClientRepository clientRepository;
@@ -63,8 +65,7 @@ public class ClientServiceImplement implements ClientService {
         .orElseThrow(() -> new UserNotFoundException("Client not found with id " + id));
 
     clientMapper.updateEntity(clientUpdateDto, client);
-    Client updatedClient = clientRepository.save(client);
-    return clientMapper.toDto(updatedClient);
+    return clientMapper.toDto(client);
   }
 
   @Override

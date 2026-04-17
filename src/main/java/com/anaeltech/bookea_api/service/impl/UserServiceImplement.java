@@ -41,7 +41,7 @@ public class UserServiceImplement implements UserService {
   @Transactional(readOnly = true)
   public UserResponseDto findById(Long id) {
     return userRepository.findById(id).map(userMapper::toDto)
-        .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+        .orElseThrow(() -> new UserNotFoundException(id));
   }
 
   @Override
@@ -62,14 +62,14 @@ public class UserServiceImplement implements UserService {
       throw new IsNotAnEmailException(email);
     }
     return userRepository.findByEmail(email).map(userMapper::toDto)
-        .orElseThrow(() -> new UserNotFoundException("User not found with email " + email));
+        .orElseThrow(() -> new UserNotFoundException(email));
   }
 
   @Override
   @Transactional
   public void deleteUser(Long id) {
     User user = userRepository.findById(id)
-        .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+        .orElseThrow(() -> new UserNotFoundException(id));
     userRepository.delete(user);
   }
 
@@ -77,7 +77,7 @@ public class UserServiceImplement implements UserService {
   @Transactional
   public UserResponseDto updateUser(Long id, UserUpdateDto userUpdateDto) {
     User user = userRepository.findById(id)
-        .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+        .orElseThrow(() -> new UserNotFoundException(id));
 
     userMapper.updateEntity(userUpdateDto, user);
     return userMapper.toDto(user);
