@@ -5,9 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record ClientCreateDto(
-
-    @NotBlank String firstname,
-    @NotBlank String lastname,
-    @NotBlank @Email String email,
+    @NotBlank @Size(max = 100) String firstname,
+    @NotBlank @Size(max = 100) String lastname,
+    @NotBlank @Email @Size(max = 150) String email,
     @NotBlank @Size(max = 20) String phone) {
 }
