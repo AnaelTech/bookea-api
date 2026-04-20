@@ -10,7 +10,7 @@ import com.anaeltech.bookea_api.dto.ClientResponseDto;
 import com.anaeltech.bookea_api.dto.ClientUpdateDto;
 import com.anaeltech.bookea_api.entity.Client;
 import com.anaeltech.bookea_api.exceptions.EmailAlreadyExistException;
-import com.anaeltech.bookea_api.exceptions.UserNotFoundException;
+import com.anaeltech.bookea_api.exceptions.ClientNotFoundException;
 import com.anaeltech.bookea_api.mapper.ClientMapper;
 import com.anaeltech.bookea_api.repository.ClientRepository;
 import com.anaeltech.bookea_api.service.ClientService;
@@ -36,7 +36,7 @@ public class ClientServiceImplement implements ClientService {
   @Transactional(readOnly = true)
   public ClientResponseDto findById(Long id) {
     return clientRepository.findById(id).map(clientMapper::toDto)
-        .orElseThrow(() -> new UserNotFoundException("Client not found with id " + id));
+        .orElseThrow(() -> new ClientNotFoundException(id));
   }
 
   @Override
@@ -53,7 +53,7 @@ public class ClientServiceImplement implements ClientService {
   @Transactional
   public void deleteClient(Long id) {
     if (!clientRepository.existsById(id)) {
-      throw new UserNotFoundException("Client not found with id " + id);
+      throw new ClientNotFoundException(id);
     }
     clientRepository.deleteById(id);
   }
@@ -62,7 +62,7 @@ public class ClientServiceImplement implements ClientService {
   @Transactional
   public ClientResponseDto updateClient(Long id, ClientUpdateDto clientUpdateDto) {
     Client client = clientRepository.findById(id)
-        .orElseThrow(() -> new UserNotFoundException("Client not found with id " + id));
+        .orElseThrow(() -> new ClientNotFoundException(id));
 
     clientMapper.updateEntity(clientUpdateDto, client);
     return clientMapper.toDto(client);
@@ -72,7 +72,7 @@ public class ClientServiceImplement implements ClientService {
   @Transactional(readOnly = true)
   public ClientResponseDto findByEmail(String email) {
     return clientRepository.findByEmail(email).map(clientMapper::toDto)
-        .orElseThrow(() -> new UserNotFoundException("Client not found with email " + email));
+        .orElseThrow(() -> new ClientNotFoundException(email));
   }
 
 }
