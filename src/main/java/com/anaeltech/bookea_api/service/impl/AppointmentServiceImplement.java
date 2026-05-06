@@ -13,6 +13,7 @@ import com.anaeltech.bookea_api.entity.Client;
 import com.anaeltech.bookea_api.entity.User;
 import com.anaeltech.bookea_api.exceptions.AppointmentAlreadyReservedException;
 import com.anaeltech.bookea_api.exceptions.AppointmentNotFoundException;
+import com.anaeltech.bookea_api.exceptions.ClientNotFoundException;
 import com.anaeltech.bookea_api.exceptions.UserNotFoundException;
 import com.anaeltech.bookea_api.mapper.AppointmentMapper;
 import com.anaeltech.bookea_api.repository.AppointmentRepository;
@@ -53,10 +54,10 @@ public class AppointmentServiceImplement implements AppointmentService {
   @Transactional
   public AppointmentResponseDto createAppointment(AppointmentCreateDto appointmentCreateDto) {
     User user = userRepository.findById(appointmentCreateDto.userId())
-        .orElseThrow(() -> new UserNotFoundException("User not found with id" + appointmentCreateDto.userId()));
+        .orElseThrow(() -> new UserNotFoundException(appointmentCreateDto.userId()));
 
     Client client = clientRepository.findById(appointmentCreateDto.clientId())
-        .orElseThrow(() -> new UserNotFoundException("Client not found with id" + appointmentCreateDto.clientId()));
+        .orElseThrow(() -> new ClientNotFoundException(appointmentCreateDto.clientId()));
 
     if (appointmentRepository.hasConflictingAppointments(user, appointmentCreateDto.startAt(),
         appointmentCreateDto.endAt())) {

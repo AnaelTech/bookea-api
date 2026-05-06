@@ -16,10 +16,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
   List<Appointment> findByUser(User user);
 
+  @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId AND a.startAt BETWEEN :start AND :end")
   List<Appointment> findByUserAndStartAtBetween(
-      User user,
-      LocalDateTime startAt,
-      LocalDateTime endAt);
+      @Param("userId") Long userId,
+      @Param("start") LocalDateTime start,
+      @Param("end") LocalDateTime end);
 
   @Query("""
       SELECT COUNT(a) > 0 FROM Appointment a
