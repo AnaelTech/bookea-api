@@ -1,6 +1,7 @@
 package com.anaeltech.bookea_api.controller;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,9 @@ import com.anaeltech.bookea_api.repository.UserRepository;
 import com.anaeltech.bookea_api.security.JwtUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -33,10 +37,11 @@ public class AuthController {
   }
 
   @Operation(summary = "Login user", responses = {
-      // @ApiResponse(responseCode = "200", description = "Successfully login, token
-      // user", content = @Content(schema = @Schema(implementation =
-      // AuthResponseDto.class))),
+      @ApiResponse(responseCode = "200", description = "Successfully login, token user", content = @Content(schema = @Schema(implementation = AuthResponseDto.class))),
+      @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+      @ApiResponse(responseCode = "400", description = "Invalid request body", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
   })
+
   @PostMapping("/login")
   public AuthResponseDto login(
       @Valid @RequestBody LoginRequestDto request) {
@@ -54,7 +59,6 @@ public class AuthController {
     String token = jwtUtil.generateToken(user.getId());
 
     return new AuthResponseDto(token);
-
   }
 
 }
