@@ -12,9 +12,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "clients", indexes = { @Index(name = "idx_client_email", columnList = "email") })
@@ -23,23 +21,17 @@ public class Client {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank
-  @Size(max = 100)
   @Column(name = "firstname", length = 100, nullable = false)
   private String firstname;
 
-  @NotBlank
-  @Size(max = 100)
   @Column(name = "lastname", length = 100, nullable = false)
   private String lastname;
 
   @Email
-  @Size(max = 100)
   @Column(name = "email", length = 100, nullable = false)
   private String email;
 
   @Pattern(regexp = "^[0-9+\\-\\s]*$")
-  @Size(max = 20)
   @Column(name = "phone", length = 20)
   private String phone;
 
