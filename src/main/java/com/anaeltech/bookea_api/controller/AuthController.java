@@ -46,8 +46,6 @@ public class AuthController {
   public AuthResponseDto login(
       @Valid @RequestBody LoginRequestDto request) {
 
-    System.out.println(request.email());
-    System.out.println(request.password());
     User user = userRepository.findByEmail(request.email())
         .orElseThrow(() -> new InvalidCredentialsException());
 
